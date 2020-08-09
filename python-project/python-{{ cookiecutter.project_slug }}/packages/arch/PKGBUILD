@@ -1,0 +1,38 @@
+pkgname="{{ cookiecutter.project_slug }}"
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="{{ cookiecutter.project_description }}"
+arch=('any')
+provides=('easy')
+source=(
+    "{{ cookiecutter.project_slug }}-${pkgver}.tar.gz"
+)
+
+sha256sums=(
+    "SKIP"
+)
+
+depends=(
+    "python"
+)
+
+makedepends=(
+    "python-setuptools"
+    "python-dephell"
+)
+
+prepare()
+{
+    cd "${pkgname}-${pkgver}"
+    dephell deps convert
+}
+
+build() {
+    cd "${pkgname}-${pkgver}"
+    python setup.py build
+}
+
+package() {
+    cd "${pkgname}-${pkgver}"
+    python setup.py install --root="${pkgdir}" --optimize=1
+}
